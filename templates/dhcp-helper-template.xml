@@ -1,0 +1,21 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+  <device>
+    <name>{/device}</name>
+      <config>
+      <interface xmlns="urn:ios">
+      <Vlan>
+        <name>{/vlan-id}</name>
+          <ip>
+          <helper-address>
+            <helper-address-list>
+              <address>{/helper-ip-address}</address>
+            </helper-address-list>
+          </helper-address>
+          </ip>
+      </Vlan>
+      </interface>
+      </config>
+  </device>
+  </devices>
+</config-template>

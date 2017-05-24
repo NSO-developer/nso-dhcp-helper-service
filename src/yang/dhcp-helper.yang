@@ -1,0 +1,58 @@
+module dhcp-helper {
+
+  namespace "http://example.com/dhcp-helper";
+  prefix dhcp-helper;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  description
+    "Package for dhcp-helper services";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.  Supports VLAN based dhcp helper";
+  }
+
+  grouping dhcp-helper-grouping {
+
+    leaf-list helper-ip-address {
+      tailf:info "DHCP helper ip address(es)";
+      min-elements 1;
+      type inet:ipv4-address;
+    }
+  }
+
+  augment /ncs:services {
+  container vlan {
+  list dhcp-helper {
+    description "DHCP helper service for VLANs";
+
+    key vlan-id;
+    leaf vlan-id {
+      tailf:info "VLAN to associate the DHCP helper(s) to";
+      type uint32;
+    }
+    leaf-list device {
+      tailf:info "Device(s) to associate the DHCP helper(s) to";
+      min-elements 1;
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint dhcp-helper-servicepoint;
+
+    uses dhcp-helper-grouping;
+  }
+  }
+  }
+}
